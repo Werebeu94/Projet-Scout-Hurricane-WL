@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Éclaireurs de Roxwood - Projet HURRICANE</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;0,900;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        scout: {
+                            light: '#E6E2DD', // Gris pierre plus sérieux
+                            gold: '#C69C6D', // Cuivre (inspiré du logo Hurricane)
+                            green: '#2F3E30', // Vert militaire sombre
+                            dark: '#151515', // Noir profond
+                            brown: '#4A3B32', // Marron terre
+                            accent: '#A67B5B', // Marron clair
+                            fox: '#D35400' // Orange Renard
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Merriweather', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            scroll-behavior: smooth;
+            /* Image de fond style GTA Forest / Concept Art - Nouvelle image plus sauvage */
+            background-image: linear-gradient(rgba(15, 15, 15, 0.85), rgba(15, 15, 15, 0.9)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #E6E2DD;
+        }
+        
+        .hero-section {
+            background: transparent;
+        }
+
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+        }
+        
+        /* Motif subtil de lignes pour effet "Document Classifié/Militaire" */
+        .grid-pattern {
+            background-image: radial-gradient(rgba(198, 156, 109, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* Custom Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            border-color: #C69C6D;
+        }
+
+        /* Effet de verre pour la navbar */
+        .glass-nav {
+            background: rgba(21, 21, 21, 0.90);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(198, 156, 109, 0.1);
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: #C69C6D;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-nav text-white py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <!-- LOGO HURRICANE (Simulation) -->
+                <div class="relative w-10 h-10 flex items-center justify-center bg-gradient-to-br from-scout-gold to-scout-brown rounded-full shadow-lg border border-white/20">
+                    <i class="fas fa-hurricane text-white text-lg animate-spin-slow"></i> 
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg tracking-wider uppercase text-scout-gold leading-none">HURRICANE</h1>
+                    <span class="text-[10px] tracking-[0.2em] text-gray-400 uppercase">Projet Whitelist</span>
+                </div>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium tracking-wide items-center">
+                <a href="#lore" class="hover:text-scout-gold transition-colors relative group">
+                    Héritage
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-scout-gold transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#objectifs" class="hover:text-scout-gold transition-colors relative group">
+                    Objectifs
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-scout-gold transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#equipement" class="hover:text-scout-gold transition-colors relative group">
+                    Matériel
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-scout-gold transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#activites" class="hover:text-scout-gold transition-colors relative group">
+                    Activités
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-scout-gold transition-all group-hover:w-full"></span>
+                </a>
+                <a href="https://discord.gg/H5KtzYaw" target="_blank" class="px-5 py-2 bg-scout-gold/10 border border-scout-gold text-scout-gold rounded hover:bg-scout-gold hover:text-white transition-all duration-300 transform hover:scale-105">
+                    <i class="fab fa-discord mr-2"></i> Rejoindre
+                </a>
+            </div>
+            <button class="md:hidden text-2xl text-scout-gold" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-scout-dark border-t border-gray-700 shadow-xl">
+            <div class="flex flex-col p-6 gap-4 text-center">
+                <a href="#lore" class="block text-gray-300 hover:text-scout-gold py-2">Héritage</a>
+                <a href="#objectifs" class="block text-gray-300 hover:text-scout-gold py-2">Objectifs</a>
+                <a href="#equipement" class="block text-gray-300 hover:text-scout-gold py-2">Matériel</a>
+                <a href="#activites" class="block text-gray-300 hover:text-scout-gold py-2">Activités</a>
+                <a href="https://discord.gg/H5KtzYaw" class="block text-scout-gold font-bold py-2 border border-scout-gold rounded mt-2">Discord</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex items-center justify-center hero-section text-center px-4 overflow-hidden">
+        <!-- Particules d'ambiance (CSS pur) -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-float"></div>
+            <div class="absolute top-3/4 left-1/3 w-3 h-3 bg-scout-gold/20 rounded-full animate-float" style="animation-delay: 1s"></div>
+            <div class="absolute top-1/2 right-1/4 w-2 h-2 bg-white/10 rounded-full animate-float" style="animation-delay: 2s"></div>
+        </div>
+
+        <div class="z-10 max-w-4xl text-white">
+            <div class="mb-8 inline-block relative group">
+                <div class="absolute inset-0 bg-scout-gold blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                <i class="fas fa-campground text-7xl md:text-8xl text-scout-light mb-4 animate-float relative z-10"></i>
+            </div>
+            
+            <!-- J'ai retiré opacity-0 et l'animation fadeIn pour que ce soit visible direct -->
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div class="h-[1px] w-12 bg-scout-gold"></div>
+                <h2 class="text-sm md:text-base font-bold tracking-[0.4em] uppercase text-scout-gold">Serveur Hurricane RP</h2>
+                <div class="h-[1px] w-12 bg-scout-gold"></div>
+            </div>
+
+            <!-- Titre Principal Visible -->
+            <h1 class="text-4xl md:text-6xl font-serif font-black mb-2 text-shadow leading-tight text-scout-gold uppercase translate-y-0">
+                LES ÉCLAIREURS ARRIVENT SUR HURRICANE
+            </h1>
+
+            <!-- Sous-titre Visible -->
+            <h2 class="text-3xl md:text-5xl font-serif font-bold mb-8 text-shadow leading-tight text-white translate-y-0">
+                <span class="italic font-light text-gray-300">Troupe de Roxwood</span>
+            </h2>
+            
+            <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 text-gray-300 font-light translate-y-0">
+                Héritiers du mouvement de 1907. Gardiens des forêts du Nord.<br>
+                <span class="text-sm text-scout-gold mt-2 block italic">"L'éducation par l'action."</span>
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-4 justify-center translate-y-0">
+                <a href="#lore" class="px-8 py-3 bg-scout-gold text-scout-dark font-bold rounded hover:bg-white hover:scale-105 transition-all uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(198,156,109,0.4)]">
+                    Notre Histoire
+                </a>
+                <a href="https://discord.gg/H5KtzYaw" target="_blank" class="px-8 py-3 bg-transparent border border-white/30 text-white font-bold rounded hover:bg-white/10 hover:border-white transition-all uppercase tracking-widest text-sm backdrop-blur-sm">
+                    Rejoindre le Discord
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-scout-gold">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </header>
+
+    <!-- Lore Section -->
+    <section id="lore" class="py-24 grid-pattern relative bg-black/40 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-scout-light mb-4">De Baden-Powell à Roxwood</h2>
+                <p class="text-scout-gold uppercase tracking-widest text-sm">Une tradition centenaire adaptée au monde moderne</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                
+                <!-- Colonne 1 : L'Histoire Réelle -->
+                <div class="relative pl-8 border-l-2 border-scout-gold/30 space-y-12">
+                    
+                    <!-- 1907 -->
+                    <div class="relative">
+                        <div class="absolute -left-[39px] top-0 w-5 h-5 bg-scout-gold rounded-full border-4 border-scout-dark"></div>
+                        <h3 class="text-xl font-bold text-scout-gold font-serif">1907 : La Genèse</h3>
+                        <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+                            Le Général <strong>Robert Baden-Powell</strong> organise le premier camp expérimental sur l'île de Brownsea. 20 garçons, un objectif : l'éducation par l'action et la responsabilité.
+                        </p>
+                    </div>
+
+                    <!-- 1908 -->
+                    <div class="relative">
+                        <div class="absolute -left-[39px] top-0 w-5 h-5 bg-scout-green rounded-full border-4 border-scout-dark"></div>
+                        <h3 class="text-xl font-bold text-white font-serif">1908 : "Scouting for Boys"</h3>
+                        <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+                            B-P publie le manuel "Éclaireurs". Le mouvement devient mondial. Le système de <strong>Patrouilles</strong> est né : de petites équipes autonomes où chacun a un rôle.
+                        </p>
+                    </div>
+
+                    <!-- 1920 -->
+                    <div class="relative">
+                        <div class="absolute -left-[39px] top-0 w-5 h-5 bg-white rounded-full border-4 border-scout-dark"></div>
+                        <h3 class="text-xl font-bold text-white font-serif">1920 : Le Premier Jamboree</h3>
+                        <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+                            Rassemblement mondial à Londres. Un idéal de paix et de réconciliation après la guerre. Baden-Powell est acclamé "Chef Scout du Monde".
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Colonne 2 : Le Lien avec GTA RP -->
+                <div class="bg-scout-dark/80 p-8 rounded-xl border border-white/10 shadow-2xl relative">
+                    <i class="fas fa-quote-left text-4xl text-scout-gold/20 absolute top-4 left-4"></i>
+                    
+                    <h3 class="text-2xl font-bold text-white mb-6 mt-4">Notre Mission à Los Santos</h3>
+                    <p class="text-gray-300 leading-relaxed mb-6">
+                        Plus d'un siècle plus tard, l'esprit de Brownsea survit dans les forêts de San Andreas. Face à la criminalité urbaine et à la perte de repères, <strong>Les Éclaireurs de Roxwood</strong> ont repris le flambeau.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed mb-6">
+                        Nous appliquons les méthodes ancestrales de B-P : <strong>vie dans la nature, jeu, et prise de responsabilités</strong>. Nous ne sommes pas une milice, nous sommes une école de caractère.
+                    </p>
+                    <div class="flex items-center gap-4 mt-8 pt-6 border-t border-white/10">
+                        <div class="flex-1">
+                            <span class="block text-scout-gold font-bold text-sm uppercase">Philosophie</span>
+                            <span class="text-xs text-gray-500">Système de Patrouilles & Autonomie</span>
+                        </div>
+                        <div class="text-right">
+                            <i class="fas fa-fingerprint text-3xl text-scout-green"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Objectifs Section -->
+    <section id="objectifs" class="py-24 bg-scout-light relative text-gray-800">
+        <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-scout-dark mb-16">Nos Missions sur <span class="text-scout-gold underline decoration-2 decoration-scout-green underline-offset-4">HURRICANE</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="p-8 rounded-xl bg-white border border-gray-200 card-hover shadow-lg group">
+                    <div class="w-16 h-16 bg-scout-green text-white rounded-2xl rotate-3 group-hover:rotate-6 transition-transform flex items-center justify-center text-2xl mx-auto mb-8 shadow-green-900/20 shadow-xl">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 font-serif text-scout-dark">Contrôle de Roxwood</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Faire de la zone Nord un lieu vivant et respecté. Roxwood n'est pas une zone de non-droit, c'est notre territoire de chasse et de vie.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="p-8 rounded-xl bg-white border border-gray-200 card-hover shadow-lg group">
+                    <div class="w-16 h-16 bg-scout-gold text-white rounded-2xl -rotate-3 group-hover:-rotate-6 transition-transform flex items-center justify-center text-2xl mx-auto mb-8 shadow-orange-900/20 shadow-xl">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 font-serif text-scout-dark">Survie & Immersion</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Apprendre aux joueurs à s'orienter sans GPS, à chasser proprement et à survivre. Créer des scènes RP riches loin des fusillades de ville.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="p-8 rounded-xl bg-white border border-gray-200 card-hover shadow-lg group">
+                    <div class="w-16 h-16 bg-scout-brown text-white rounded-2xl rotate-3 group-hover:rotate-6 transition-transform flex items-center justify-center text-2xl mx-auto mb-8 shadow-gray-900/20 shadow-xl">
+                        <i class="fas fa-kit-medical"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 font-serif text-scout-dark">Secours d'Urgence</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Intervenir là où les EMS ne peuvent pas aller. Montagnes, ravins, forêts denses. Nous sommes les premiers répondants du Nord.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment Section (NOUVELLE SECTION) -->
+    <section id="equipement" class="py-24 bg-scout-dark/95 backdrop-blur-md relative overflow-hidden border-t border-white/5">
+        <!-- Fond décoratif sombre -->
+        <div class="absolute top-0 right-0 w-full h-full opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-scout-gold font-bold tracking-widest uppercase text-xs">Inventaire & Logistique</span>
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-white mt-2 mb-4">Pack de Survie 72H</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Conformément au manuel de 1908, chaque éclaireur doit pouvoir subsister en autonomie totale. Voici notre équipement standard sur le terrain.
+                </p>
+            </div>
+
+            <!-- Grille d'équipement basée sur l'image -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                
+                <!-- Item: Sac à dos -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-scout-gold transition-colors group">
+                    <i class="fas fa-hiking text-2xl text-scout-gold mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Sac à Dos 45L</h4>
+                    <span class="text-xs text-gray-500">Stockage principal</span>
+                </div>
+
+                <!-- Item: Tente -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-scout-green transition-colors group">
+                    <i class="fas fa-campground text-2xl text-scout-green mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Bivouac</h4>
+                    <span class="text-xs text-gray-500">Repos & Save Point</span>
+                </div>
+
+                <!-- Item: Boussole -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-blue-400 transition-colors group">
+                    <i class="far fa-compass text-2xl text-blue-400 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Boussole</h4>
+                    <span class="text-xs text-gray-500">Orientation (No GPS)</span>
+                </div>
+
+                <!-- Item: Hachette -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-red-400 transition-colors group">
+                    <i class="fas fa-hammer text-2xl text-red-400 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Hachette</h4>
+                    <span class="text-xs text-gray-500">Récolte de bois</span>
+                </div>
+
+                <!-- Item: Corde -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-yellow-600 transition-colors group">
+                    <i class="fas fa-hashtag text-2xl text-yellow-600 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Corde 20m</h4>
+                    <span class="text-xs text-gray-500">Rappel & Secours</span>
+                </div>
+
+                <!-- Item: Couteau Suisse -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-gray-300 transition-colors group">
+                    <i class="fas fa-tools text-2xl text-gray-300 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Couteau</h4>
+                    <span class="text-xs text-gray-500">Dépeçage & Craft</span>
+                </div>
+
+                <!-- Item: First Aid -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-red-600 transition-colors group">
+                    <i class="fas fa-briefcase-medical text-2xl text-red-600 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Kit de Soin</h4>
+                    <span class="text-xs text-gray-500">Urgence vitale</span>
+                </div>
+
+                <!-- Item: Lampe -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-yellow-200 transition-colors group">
+                    <i class="fas fa-lightbulb text-2xl text-yellow-200 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Lampe Torche</h4>
+                    <span class="text-xs text-gray-500">Exploration nuit</span>
+                </div>
+
+                <!-- Item: Gourde -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-blue-300 transition-colors group">
+                    <i class="fas fa-tint text-2xl text-blue-300 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Gourde Alu</h4>
+                    <span class="text-xs text-gray-500">Hydratation</span>
+                </div>
+
+                <!-- Item: Sifflet -->
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 hover:border-orange-500 transition-colors group">
+                    <i class="fas fa-bullhorn text-2xl text-orange-500 mb-3 group-hover:scale-110 transition-transform block"></i>
+                    <h4 class="font-bold text-white text-sm">Sifflet</h4>
+                    <span class="text-xs text-gray-500">Signal détresse</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location / QG -->
+    <section class="py-24 bg-scout-dark/95 backdrop-blur text-white relative overflow-hidden border-y border-scout-gold/20">
+        <!-- Image de fond technique -->
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-16">
+                <div class="md:w-1/2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-scout-gold/20 text-scout-gold text-xs font-bold uppercase tracking-widest mb-6">
+                        <i class="fas fa-map-marker-alt"></i> Zone revendiquée
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-serif font-bold mb-8 leading-tight">Le Campement <br><span class="text-gray-400 text-2xl">Base Opérationnelle</span></h2>
+                    
+                    <div class="space-y-6">
+                        <div class="group cursor-pointer">
+                            <div class="flex items-center gap-6 p-6 bg-white/5 rounded-xl border border-white/10 hover:border-scout-gold hover:bg-white/10 transition-all">
+                                <div class="w-12 h-12 rounded-full bg-scout-gold flex items-center justify-center text-scout-dark text-xl shrink-0">A</div>
+                                <div>
+                                    <strong class="block text-xl text-scout-gold mb-1">Scierie de Roxwood</strong>
+                                    <p class="text-sm text-gray-400">Emplacement stratégique. RP Industriel et forestier. Accès véhicules lourds.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="opacity-50 hover:opacity-100 transition-opacity">
+                            <div class="flex items-center gap-6 p-4 border-l-2 border-gray-700 pl-6">
+                                <div class="text-gray-500 font-bold">Option B</div>
+                                <div class="text-gray-500 text-sm">Clairière Haute (Repli tactique)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="absolute -inset-4 bg-scout-gold/20 rounded-xl blur-lg"></div>
+                    <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Campement Tente" class="relative rounded-lg shadow-2xl border border-white/20 grayscale-[20%]">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activities -->
+    <section id="activites" class="py-24 bg-scout-light relative text-gray-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-serif font-bold text-scout-dark mt-4">Nos Activités</h2>
+                <div class="w-24 h-1 bg-scout-gold mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <!-- Legal Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white p-10 rounded-2xl shadow-xl border-t-4 border-scout-green hover:shadow-2xl transition-shadow relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-5 text-scout-green transform translate-x-1/4 -translate-y-1/4">
+                        <i class="fas fa-leaf text-9xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-scout-green mb-6 flex items-center gap-3 relative z-10">
+                        <span class="bg-scout-green/10 p-2 rounded-lg"><i class="fas fa-hiking"></i></span> Civil / Légal
+                    </h3>
+                    <ul class="space-y-6 text-gray-700 relative z-10">
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-2 h-2 rounded-full bg-scout-green shrink-0"></div>
+                            <div>
+                                <strong class="block text-scout-dark">Bootcamp Survie</strong>
+                                <span class="text-sm text-gray-500">Week-end intensif. Pas de GPS. Pas de téléphone. Juste vous et la nature.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-2 h-2 rounded-full bg-scout-green shrink-0"></div>
+                            <div>
+                                <strong class="block text-scout-dark">Expéditions Guidées</strong>
+                                <span class="text-sm text-gray-500">Ascension sécurisée du Mont Chiliad et découverte de grottes.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-2 h-2 rounded-full bg-scout-green shrink-0"></div>
+                            <div>
+                                <strong class="block text-scout-dark">Commerce Local</strong>
+                                <span class="text-sm text-gray-500">Vente de gibier, poisson, bois et kits de réparation.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Illegal Grid (Darker Theme) -->
+                <div class="bg-[#1a1a1a] text-gray-300 p-10 rounded-2xl shadow-xl border-t-4 border-red-900 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-10"></div>
+                    <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-red-900/20 rounded-full blur-3xl"></div>
+                    
+                    <h3 class="text-2xl font-bold text-red-500 mb-6 flex items-center gap-3 relative z-10">
+                        <span class="bg-red-900/20 p-2 rounded-lg"><i class="fas fa-mask"></i></span> Underground
+                    </h3>
+                    <div class="inline-block px-3 py-1 border border-red-900/50 text-red-700 text-[10px] font-bold uppercase tracking-widest rounded mb-6">Confidentiel</div>
+                    
+                    <ul class="space-y-6 relative z-10">
+                        <li class="flex items-start gap-4 group-hover:translate-x-2 transition-transform duration-300">
+                            <i class="fas fa-skull-crossbones text-red-800 mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-200">Passeurs de la Forêt</strong>
+                                <span class="text-sm text-gray-500">Transport hors-piste via des sentiers invisibles sur la map.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 group-hover:translate-x-2 transition-transform duration-300 delay-100">
+                            <i class="fas fa-flask text-red-800 mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-200">Moonshine Roxwood</strong>
+                                <span class="text-sm text-gray-500">Production d'alcool artisanal caché dans les bois profonds.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hierarchy -->
+    <section id="hierarchie" class="py-24 bg-white text-gray-800">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-serif font-bold text-scout-dark mb-12">La Meute</h2>
+            
+            <div class="flex flex-wrap justify-center gap-6">
+                <!-- Rank Leader -->
+                <div class="flex flex-col items-center p-6 w-40">
+                    <div class="w-20 h-20 rounded-full border-4 border-scout-gold p-1 mb-4 relative">
+                        <img src="https://ui-avatars.com/api/?name=Chef&background=C69C6D&color=fff" class="rounded-full w-full h-full" alt="Chef">
+                        <div class="absolute -top-2 -right-2 bg-scout-dark text-scout-gold w-8 h-8 flex items-center justify-center rounded-full text-xs border border-scout-gold"><i class="fas fa-crown"></i></div>
+                    </div>
+                    <h4 class="font-bold text-scout-dark text-sm">Chef de Troupe</h4>
+                    <span class="text-xs text-scout-gold uppercase font-bold tracking-wider mt-1">Leader</span>
+                </div>
+
+                <!-- Rank 2 -->
+                <div class="flex flex-col items-center p-6 w-40 opacity-100">
+                    <div class="w-20 h-20 rounded-full border-2 border-scout-green p-1 mb-4">
+                        <div class="w-full h-full bg-scout-green rounded-full flex items-center justify-center text-white text-2xl"><i class="fas fa-shield-alt"></i></div>
+                    </div>
+                    <h4 class="font-bold text-scout-dark text-sm">Grand Ours</h4>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider mt-1">Co-Lead</span>
+                </div>
+
+                <!-- Rank 3 -->
+                <div class="flex flex-col items-center p-6 w-40 opacity-90">
+                    <div class="w-20 h-20 rounded-full border-2 border-gray-400 p-1 mb-4">
+                        <div class="w-full h-full bg-gray-500 rounded-full flex items-center justify-center text-white text-xl"><i class="fas fa-paw"></i></div>
+                    </div>
+                    <h4 class="font-bold text-scout-dark text-sm">Loup</h4>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider mt-1">Confirmé</span>
+                </div>
+
+                <!-- Rank 4 (NOUVEAU GRADE : RENARD) -->
+                <div class="flex flex-col items-center p-6 w-40 opacity-90 transform hover:scale-105 transition-transform">
+                    <div class="w-20 h-20 rounded-full border-2 border-scout-fox p-1 mb-4">
+                        <div class="w-full h-full bg-scout-fox rounded-full flex items-center justify-center text-white text-xl"><i class="fas fa-binoculars"></i></div>
+                    </div>
+                    <h4 class="font-bold text-scout-dark text-sm">Renard</h4>
+                    <span class="text-xs text-scout-fox uppercase font-bold tracking-wider mt-1">Intermédiaire</span>
+                </div>
+
+                <!-- Rank 5 -->
+                <div class="flex flex-col items-center p-6 w-40 opacity-70">
+                    <div class="w-20 h-20 rounded-full border-2 border-stone-300 p-1 mb-4">
+                        <div class="w-full h-full bg-stone-300 rounded-full flex items-center justify-center text-white text-xl"><i class="fas fa-user"></i></div>
+                    </div>
+                    <h4 class="font-bold text-scout-dark text-sm">Castor</h4>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider mt-1">Recrue</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-scout-dark text-white py-16 border-t border-scout-gold/30 relative">
+        <div class="max-w-4xl mx-auto text-center px-6 relative z-10">
+            
+            <!-- Logo Footer (Simulation) -->
+            <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-scout-gold to-scout-brown rounded-full flex items-center justify-center shadow-lg shadow-scout-gold/20 animate-pulse-slow">
+                 <!-- Remplacez l'icône ci-dessous par votre <img> réelle -->
+                <i class="fas fa-hurricane text-3xl"></i>
+            </div>
+
+            <h2 class="text-2xl font-serif font-bold mb-2">Les Éclaireurs</h2>
+            <p class="text-scout-gold text-sm tracking-widest uppercase mb-8">Projet Serveur Hurricane</p>
+            
+            <p class="text-gray-400 mb-10 max-w-lg mx-auto text-sm leading-relaxed">
+                Rejoignez-nous au Nord. Que vous cherchiez l'aventure, un abri pour la nuit ou une nouvelle famille.
+            </p>
+            
+            <!-- Bouton Discord Unique -->
+            <div class="flex justify-center mb-12">
+                <a href="https://discord.gg/H5KtzYaw" target="_blank" class="group relative inline-flex items-center gap-3 px-8 py-4 bg-[#5865F2] rounded-lg hover:bg-[#4752C4] transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-900/50 overflow-hidden">
+                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    <i class="fab fa-discord text-2xl"></i>
+                    <span class="font-bold">Rejoindre le Discord</span>
+                </a>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                <p>&copy; 2024 Les Éclaireurs de Roxwood.</p>
+                <p>HURRICANE RP Project.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animations d'apparition au scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            // Style pour l'animation fade in up
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .fade-in-up {
+                    animation: fadeInUp 0.8s ease-out forwards;
+                }
+            `;
+            document.head.appendChild(style);
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-up');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Cible les éléments à animer
+            document.querySelectorAll('section h2, section h3, .card-hover').forEach(el => {
+                el.style.opacity = '0'; // Initial state
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
